@@ -4,11 +4,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] Animator animator;
+    public static UIManager Instance { get; private set; }
+
+    [SerializeField] public Animator animator;
 
     [SerializeField] Button CloseListButton;
     [SerializeField] Button ListButton;
-    private bool isListOpen = false;
+    public bool isListOpen = false;
 
     [SerializeField] Button chairListButton;
     [SerializeField] Button bedListButton;
@@ -26,7 +28,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject mirrorListObjects;
     [SerializeField] GameObject sofaListObjects;
 
-    private GameObject curTarget = null;
+    public GameObject curTarget = null;
+    public GameObject CurTarget { get { return curTarget; } }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -56,7 +71,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void CloseList()
+    public void CloseList()
     {
         animator.Play("CloseList");
         HideAllFurniture();
@@ -100,5 +115,10 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         targetList.SetActive(false);
+    }
+
+    public void Listinterct(bool a)
+    {
+        ListButton.interactable = a;
     }
 }
